@@ -6,51 +6,68 @@
 <title>🏟️ Cyber Derby</title>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f4f4f0; min-height: 100vh; padding: 1.5rem; color: #1a1a1a; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0d0d0d; min-height: 100vh; padding: 1.5rem; color: #e8e8e8; }
   .wrap { max-width: 700px; margin: 0 auto; }
 
   .track-container { background: #1a5c1a; border-radius: 12px; padding: 1.5rem; margin-bottom: 1rem; overflow: hidden; }
   .track-title { text-align: center; color: #f5e642; font-size: 20px; font-weight: 600; letter-spacing: 2px; margin-bottom: 1.2rem; }
   .track-lane { display: flex; align-items: center; background: #145214; border-radius: 6px; margin-bottom: 8px; height: 52px; position: relative; border: 1px solid #2a7a2a; overflow: hidden; }
   .lane-finish { position: absolute; right: 0; top: 0; bottom: 0; width: 32px; background: repeating-linear-gradient(45deg,#fff 0,#fff 4px,#222 4px,#222 8px); opacity: 0.6; }
-  .lane-label { position: absolute; left: 8px; font-size: 11px; color: #a0d0a0; font-weight: 500; z-index: 2; }
+  .lane-label { position: absolute; left: 8px; font-size: 12px; color: #a0d0a0; font-weight: 600; z-index: 4; white-space: nowrap; text-shadow: 0 1px 3px rgba(0,0,0,0.9), 0 0 6px rgba(0,0,0,0.8); pointer-events: none; }
   .horse { position: absolute; left: 40px; font-size: 28px; transition: left 0.1s linear; z-index: 3; filter: drop-shadow(1px 1px 2px rgba(0,0,0,0.5)); }
   .progress-bar { position: absolute; left: 40px; top: 0; bottom: 0; background: rgba(255,255,255,0.07); transition: width 0.1s linear; z-index: 1; }
   .finish-line-glow { position: absolute; right: 32px; top: 0; bottom: 0; width: 2px; background: #f5e642; opacity: 0.8; }
 
   .panel { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 1rem; }
   @media (max-width: 520px) { .panel { grid-template-columns: 1fr; } }
-  .card { background: #fff; border: 1px solid #e0e0d8; border-radius: 12px; padding: 1rem 1.25rem; }
+  .card { background: #1a1a1a; border: 1px solid #2a2a2a; border-radius: 12px; padding: 1rem 1.25rem; }
   .card-title { font-size: 12px; color: #888; margin-bottom: 10px; font-weight: 500; }
 
   .horse-table { width: 100%; border-collapse: collapse; font-size: 13px; }
-  .horse-table thead tr { border-bottom: 1px solid #e8e8e0; }
+  .horse-table thead tr { border-bottom: 1px solid #2a2a2a; }
   .horse-table thead th { font-size: 11px; font-weight: 500; color: #888; padding: 0 6px 8px 6px; text-align: left; }
   .horse-table thead th.center { text-align: center; }
-  .horse-table tbody tr { border-bottom: 1px solid #f0f0e8; cursor: pointer; transition: background 0.12s; }
+  .horse-table tbody tr { border-bottom: 1px solid #222; cursor: pointer; transition: background 0.12s; }
   .horse-table tbody tr:last-child { border-bottom: none; }
-  .horse-table tbody tr:hover { background: #f8f8f4; }
-  .horse-table tbody tr.selected { background: rgba(42,157,42,0.08); outline: 1px solid #2a9d2a; }
-  .horse-table td { padding: 8px 6px; vertical-align: middle; }
+  .horse-table tbody tr:hover { background: #222; }
+  .horse-table tbody tr.selected { background: rgba(42,157,42,0.15); outline: 1px solid #2a9d2a; }
+  .horse-table td { padding: 8px 6px; vertical-align: middle; color: #e8e8e8; }
   .td-name { display: flex; align-items: center; gap: 7px; }
-  .td-odds { text-align: center; font-weight: 600; color: #d4a017; background: rgba(212,160,23,0.1); border-radius: 4px; padding: 2px 8px; font-size: 12px; white-space: nowrap; display: inline-block; }
+  .td-odds { text-align: center; font-weight: 600; color: #f5c842; background: rgba(245,200,66,0.12); border-radius: 4px; padding: 2px 8px; font-size: 12px; white-space: nowrap; display: inline-block; }
   .td-tier { font-size: 11px; color: #888; white-space: nowrap; }
 
   .bet-section { display: flex; flex-direction: column; gap: 10px; }
   .points-label { font-size: 12px; color: #888; }
-  .points-display { font-size: 22px; font-weight: 600; color: #1a1a1a; }
+  .points-display { font-size: 22px; font-weight: 600; color: #f5c842; }
   .bet-input-row { display: flex; gap: 8px; align-items: center; }
-  .bet-input-row input { flex: 1; font-size: 14px; padding: 7px 10px; border-radius: 8px; border: 1px solid #ddd; background: #f8f8f4; color: #1a1a1a; }
+  .bet-input-row input { flex: 1; font-size: 14px; padding: 7px 10px; border-radius: 8px; border: 1px solid #333; background: #111; color: #e8e8e8; }
   .quick-bets { display: flex; gap: 6px; flex-wrap: wrap; }
-  .quick-btn { font-size: 12px; padding: 4px 10px; border-radius: 8px; border: 1px solid #ddd; background: transparent; color: #555; cursor: pointer; }
-  .quick-btn:hover { background: #f0f0e8; }
+  .quick-btn { font-size: 12px; padding: 5px 11px; border-radius: 8px; border: 1px solid #333; background: #111; color: #ccc; cursor: pointer; transition: background 0.12s; }
+  .quick-btn:hover { background: #2a2a2a; color: #fff; }
+
+  .debt-bar {
+    background: #1a1a1a; border: 2px solid #c0392b; border-radius: 12px;
+    padding: 1rem 1.25rem; margin-bottom: 1rem; display: none;
+  }
+  .debt-bar.show { display: block; }
+  .debt-bar-top { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 2px; }
+  .debt-bar-title { font-size: 12px; font-weight: 500; color: #c0392b; }
+  .debt-bar-amount { font-size: 22px; font-weight: 700; color: #c0392b; letter-spacing: -0.5px; }
+  .debt-interest-row { text-align: right; margin-bottom: 12px; }
+  .debt-interest-label { font-size: 12px; color: #e67e22; }
+  .debt-repay-row { display: flex; gap: 8px; align-items: center; }
+  .debt-repay-row input { flex: 1; font-size: 13px; padding: 6px 10px; border-radius: 8px; border: 1px solid #333; background: #111; color: #e8e8e8; }
+  .btn-repay-partial { padding: 8px 16px; border-radius: 8px; border: none; background: #c0392b; color: #fff; font-size: 13px; font-weight: 600; cursor: pointer; white-space: nowrap; }
+  .btn-repay-partial:hover { background: #a93226; }
+  .btn-repay-full { padding: 8px 16px; border-radius: 8px; border: none; background: #2a9d2a; color: #fff; font-size: 13px; font-weight: 600; cursor: pointer; white-space: nowrap; }
+  .btn-repay-full:hover { background: #238a23; }
 
   .action-row { display: flex; gap: 10px; margin-bottom: 1rem; }
   .btn-start { flex: 1; padding: 12px; border-radius: 8px; border: none; background: #2a9d2a; color: #fff; font-size: 15px; font-weight: 600; cursor: pointer; }
   .btn-start:hover { background: #238a23; }
-  .btn-start:disabled { background: #aaa; cursor: not-allowed; }
-  .btn-reset { padding: 12px 18px; border-radius: 8px; border: 1px solid #ddd; background: transparent; color: #555; font-size: 14px; cursor: pointer; }
-  .btn-reset:hover { background: #f0f0e8; }
+  .btn-start:disabled { background: #333; color: #666; cursor: not-allowed; }
+  .btn-reset { padding: 12px 18px; border-radius: 8px; border: 1px solid #333; background: transparent; color: #888; font-size: 14px; cursor: pointer; }
+  .btn-reset:hover { background: #1a1a1a; color: #ccc; }
 
   .result-banner { display: none; border-radius: 12px; padding: 1.5rem; text-align: center; margin-bottom: 1rem; }
   .result-banner.show { display: block; }
@@ -58,9 +75,52 @@
   .result-text { font-size: 18px; font-weight: 600; }
   .result-sub { font-size: 14px; margin-top: 6px; }
 
-  .log { background: #f0f0e8; border-radius: 8px; padding: 10px 14px; font-size: 12px; color: #555; min-height: 40px; max-height: 80px; overflow-y: auto; line-height: 1.6; }
+  .log { background: #111; border: 1px solid #222; border-radius: 8px; padding: 10px 14px; font-size: 12px; color: #888; min-height: 40px; max-height: 80px; overflow-y: auto; line-height: 1.6; }
   .log-entry.win { color: #2a9d2a; font-weight: 600; }
   .log-entry.lose { color: #c0392b; }
+
+  .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 100; align-items: center; justify-content: center; }
+  .modal-overlay.show { display: flex; }
+  .modal { background: #1a1a1a; border: 1px solid #333; border-radius: 16px; padding: 2rem; max-width: 360px; width: 90%; text-align: center; }
+  .modal-icon { font-size: 48px; margin-bottom: 1rem; }
+  .modal-title { font-size: 20px; font-weight: 700; color: #f5c842; margin-bottom: 0.5rem; }
+  .modal-desc { font-size: 13px; color: #aaa; line-height: 1.7; margin-bottom: 1.5rem; }
+  .modal-loan-options { display: flex; flex-direction: column; gap: 10px; margin-bottom: 1rem; }
+  .loan-btn { padding: 12px; border-radius: 8px; border: 1px solid #333; background: #111; color: #e8e8e8; cursor: pointer; font-size: 13px; display: flex; justify-content: space-between; align-items: center; transition: background 0.12s; }
+  .loan-btn:hover { background: #2a2a2a; }
+  .loan-btn .loan-name { font-weight: 600; }
+  .loan-btn .loan-rate { font-size: 11px; color: #c0392b; }
+  .loan-btn .loan-amount { color: #f5c842; font-weight: 600; }
+  .modal-cancel { font-size: 12px; color: #555; cursor: pointer; margin-top: 0.5rem; }
+  .modal-cancel:hover { color: #888; }
+
+  .debt-bar.repaid {
+    border-color: #2a9d2a;
+    transition: border-color 0.3s;
+  }
+  .debt-bar.repaid .debt-bar-title { color: #2a9d2a; }
+  .debt-bar.repaid .debt-bar-amount { color: #2a9d2a; }
+  .debt-repaid-fill {
+    position: absolute; top: 0; left: 0; bottom: 0; width: 0%;
+    background: rgba(42,157,42,0.15);
+    border-radius: 10px;
+    transition: width 1.2s ease-out;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .debt-bar { position: relative; overflow: hidden; }
+  .debt-bar > * { position: relative; z-index: 1; }
+  .debt-repaid-label {
+    display: none;
+    text-align: center;
+    font-size: 18px;
+    font-weight: 700;
+    color: #2a9d2a;
+    margin: 8px 0 4px;
+    letter-spacing: 1px;
+  }
+  .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); background: #c0392b; color: #fff; padding: 10px 20px; border-radius: 8px; font-size: 13px; font-weight: 600; z-index: 200; opacity: 0; transition: opacity 0.3s; white-space: nowrap; }
+  .toast.show { opacity: 1; }
 </style>
 </head>
 <body>
@@ -83,31 +143,31 @@
         <thead><tr><th>말 이름</th><th class="center">배당률</th><th>등급</th></tr></thead>
         <tbody id="horse-tbody"></tbody>
       </table>
-      <div style="margin-top:8px;font-size:11px;color:#888;line-height:1.6">
-        💡 배당률 = 베팅액에 곱해서 돌려받는 배수<br>예) 100P × 3.5배 → 당첨 시 350P 반환
+      <div style="margin-top:8px;font-size:11px;color:#666;line-height:1.6">
+        💡 배당률 = 베팅액에 곱해서 돌려받는 배수<br>예) 10만 원 × 3.5배 → 당첨 시 35만 원 반환
       </div>
     </div>
     <div class="card">
       <div class="bet-section">
         <div>
-          <div class="points-label">보유 포인트</div>
-          <div class="points-display" id="points-display">1,000 P</div>
+          <div class="points-label">보유 금액</div>
+          <div class="points-display" id="points-display">100만 원</div>
         </div>
         <div>
           <div class="points-label" style="margin-bottom:6px">베팅 금액</div>
           <div class="bet-input-row">
-            <input type="number" id="bet-amount" value="100" min="10" step="10" />
-            <span style="font-size:13px;color:#888">P</span>
+            <input type="number" id="bet-amount" value="10000" min="1000" step="1000" />
+            <span style="font-size:13px;color:#666">원</span>
           </div>
           <div class="quick-bets" style="margin-top:8px">
-            <button class="quick-btn" onclick="setBet(50)">50</button>
-            <button class="quick-btn" onclick="setBet(100)">100</button>
-            <button class="quick-btn" onclick="setBet(300)">300</button>
-            <button class="quick-btn" onclick="setBet(500)">500</button>
+            <button class="quick-btn" onclick="setBetPct(10)">10%</button>
+            <button class="quick-btn" onclick="setBetPct(25)">25%</button>
+            <button class="quick-btn" onclick="setBetPct(50)">50%</button>
+            <button class="quick-btn" onclick="setBetPct(75)">75%</button>
             <button class="quick-btn" onclick="setBetAll()">올인</button>
           </div>
         </div>
-        <div id="bet-preview" style="font-size:12px;color:#888">말을 선택하세요</div>
+        <div id="bet-preview" style="font-size:12px;color:#666">말을 선택하세요</div>
       </div>
     </div>
   </div>
@@ -117,34 +177,162 @@
     <button class="btn-reset" onclick="resetRace()">초기화</button>
   </div>
 
+
+<!-- 대출 상환 바 -->
+  <div class="debt-bar" id="debt-bar">
+    <div class="debt-repaid-fill" id="debt-fill"></div>
+    <div class="debt-repaid-label" id="debt-repaid-label">🎉 전액 상환 완료!</div>
+    <div class="debt-bar-top">
+      <span class="debt-bar-title">💀 대출 잔액</span>
+      <span class="debt-bar-amount" id="debt-amount-display">0원</span>
+    </div>
+    <div class="debt-interest-row">
+      <span class="debt-interest-label" id="debt-rate-info"></span>
+    </div>
+    <div class="debt-repay-row">
+      <input type="number" id="repay-input" placeholder="상환 금액 (만 원 단위)" min="1" step="1" />
+      <button class="btn-repay-partial" onclick="repayPartial()">일부 상환</button>
+      <button class="btn-repay-full" onclick="repayFull()">전액 상환</button>
+    </div>
+  </div>
+
   <div class="log" id="log">
     <div class="log-entry">🎰 환영합니다! 말을 고르고 베팅 후 경기를 시작하세요.</div>
   </div>
 </div>
 
+<div class="modal-overlay" id="loan-modal">
+  <div class="modal">
+    <div class="modal-icon">💸</div>
+    <div class="modal-title">파산하셨습니다</div>
+    <div class="modal-desc">
+      잔액이 부족합니다.<br>
+      <b style="color:#f5c842">사이버 대출</b>을 받아 계속하시겠어요?<br>
+      <span style="font-size:11px;color:#666">(※ 매 경기마다 이자가 차감됩니다)</span>
+    </div>
+    <div class="modal-loan-options">
+      <button class="loan-btn" onclick="takeLoan(500000, 0.05, '급전 대출')">
+        <span class="loan-name">🏦 급전 대출</span>
+        <span class="loan-amount">50만 원</span>
+        <span class="loan-rate">이자 5%/경기</span>
+      </button>
+      <button class="loan-btn" onclick="takeLoan(2000000, 0.10, '중금리 대출')">
+        <span class="loan-name">💳 중금리 대출</span>
+        <span class="loan-amount">200만 원</span>
+        <span class="loan-rate">이자 10%/경기</span>
+      </button>
+      <button class="loan-btn" onclick="takeLoan(10000000, 0.20, '사채')">
+        <span class="loan-name">🦈 사채</span>
+        <span class="loan-amount">1,000만 원</span>
+        <span class="loan-rate">이자 20%/경기</span>
+      </button>
+    </div>
+    <div class="modal-cancel" onclick="closeModal()">그냥 초기화할게요</div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
 <script>
 const HORSES = [
-  { name: "번개발",     emoji: "🐎", odds: 2.1, tier: "우승 후보" },
-  { name: "황금갈기",   emoji: "🦄", odds: 3.5, tier: "중간" },
-  { name: "폭풍질주",   emoji: "🐴", odds: 1.8, tier: "강력 우승 후보" },
-  { name: "달빛그림자", emoji: "🎠", odds: 4.2, tier: "다크호스" },
-  { name: "철갑발굽",   emoji: "🐎", odds: 5.0, tier: "다크호스" },
+  { name: "인생역전",   emoji: "🐴", odds: 1.8, tier: "강력 우승 후보" },
+  { name: "한방인생",   emoji: "🐎", odds: 2.8, tier: "우승 후보" },
+  { name: "올인각",     emoji: "🦄", odds: 4.0, tier: "중간" },
+  { name: "금의환향",   emoji: "🎠", odds: 5.5, tier: "다크호스" },
+  { name: "역전의명수", emoji: "🐎", odds: 7.0, tier: "진짜 다크호스" },
 ];
-let points = parseInt(localStorage.getItem("cyberDerbyPoints") || "1000");
+
+const UNIT = 1000;
+let points = 1000000;
+let debt = 0, debtRate = 0, debtName = "";
 let selectedHorse = null, racing = false, animFrame = null, positions = [];
 
-function savePoints() { localStorage.setItem("cyberDerbyPoints", points); }
-function updatePointsDisplay() { document.getElementById("points-display").textContent = points.toLocaleString() + " P"; }
-function setBet(n) { document.getElementById("bet-amount").value = Math.min(n, points); updatePreview(); }
-function setBetAll() { document.getElementById("bet-amount").value = points; updatePreview(); }
+function fmtWon(n) {
+  const abs = Math.abs(n);
+  if (abs >= 100000000) return (n / 100000000).toFixed(1) + "억 원";
+  if (abs >= 10000) return Math.round(n / 10000).toLocaleString() + "만 원";
+  return n.toLocaleString() + "원";
+}
+
+function updateDebtBar() {
+  const bar = document.getElementById("debt-bar");
+  if (debt > 0) {
+    bar.classList.add("show");
+    document.getElementById("debt-amount-display").textContent = fmtWon(debt);
+    document.getElementById("debt-rate-info").textContent =
+      "다음 경기 이자: -" + fmtWon(Math.floor(debt * debtRate)) + "  (" + debtName + " " + (debtRate * 100).toFixed(0) + "%/경기)";
+  } else {
+    bar.classList.remove("show");
+  }
+}
+
+function updatePointsDisplay() {
+  document.getElementById("points-display").textContent = fmtWon(points);
+  updateDebtBar();
+}
+
+function repayPartial() {
+  const raw = parseInt(document.getElementById("repay-input").value) || 0;
+  const amount = raw * 10000;
+  if (amount < 10000) { showToast("⚠️ 최소 1만 원 이상 입력하세요"); return; }
+  if (amount > points) { showToast("⚠️ 잔액이 부족합니다"); return; }
+  if (amount > debt) { showToast("⚠️ 대출 잔액보다 많습니다"); return; }
+  points -= amount;
+  debt -= amount;
+  document.getElementById("repay-input").value = "";
+  addLog("✅ 대출 " + fmtWon(amount) + " 상환 완료. 잔액: " + fmtWon(debt), "win");
+  if (debt <= 0) { debt = 0; debtRate = 0; debtName = ""; addLog("🎉 대출 전액 상환 완료! 이제 자유다!", "win"); triggerRepaidAnimation(); }
+  updatePointsDisplay();
+}
+
+function repayFull() {
+  if (debt <= 0) return;
+  if (points < debt) { showToast("⚠️ 전액 상환하려면 " + fmtWon(debt) + " 필요합니다"); return; }
+  points -= debt;
+  addLog("🎉 대출 " + fmtWon(debt) + " 전액 상환 완료! 이제 자유다!", "win");
+  debt = 0; debtRate = 0; debtName = "";
+  updatePointsDisplay();
+  triggerRepaidAnimation();
+}
+
+function setBetPct(pct) {
+  if (points < UNIT) { showToast("⚠️ 베팅 가능한 잔액이 없습니다"); return; }
+  const raw = Math.floor(points * pct / 100 / UNIT) * UNIT;
+  document.getElementById("bet-amount").value = Math.max(UNIT, raw);
+  updatePreview();
+}
+function setBetAll() {
+  if (points < UNIT) { showToast("⚠️ 베팅 가능한 잔액이 없습니다"); return; }
+  document.getElementById("bet-amount").value = Math.max(UNIT, points);
+  updatePreview();
+}
 function updatePreview() {
   const bet = parseInt(document.getElementById("bet-amount").value) || 0;
   const el = document.getElementById("bet-preview");
   if (selectedHorse === null) { el.textContent = "말을 선택하세요"; return; }
   const h = HORSES[selectedHorse];
-  el.innerHTML = "<b>" + h.name + "</b> 당첨 시 → <b style='color:#2a9d2a'>" + Math.floor(bet * h.odds).toLocaleString() + "P</b> 반환";
+  const prize = Math.floor(bet * h.odds);
+  el.innerHTML = "<b style='color:#e8e8e8'>" + h.name + "</b> 당첨 시 → <b style='color:#2a9d2a'>+" + fmtWon(prize) + "</b> 반환";
 }
 document.getElementById("bet-amount").addEventListener("input", updatePreview);
+
+function takeLoan(amount, rate, name) {
+  points += amount;
+  debt += amount;
+  debtRate = rate;
+  debtName = name;
+  closeModal();
+  updatePointsDisplay();
+  addLog("🏦 " + name + " " + fmtWon(amount) + " 대출 완료. 이자 " + (rate*100).toFixed(0) + "%/경기", "lose");
+}
+function closeModal() { document.getElementById("loan-modal").classList.remove("show"); }
+function showLoanModal() { document.getElementById("loan-modal").classList.add("show"); }
+function showToast(msg) {
+  const t = document.getElementById("toast");
+  t.textContent = msg;
+  t.classList.add("show");
+  setTimeout(() => t.classList.remove("show"), 2500);
+}
 
 function buildHorseTable() {
   document.getElementById("horse-tbody").innerHTML = HORSES.map((h, i) =>
@@ -181,22 +369,22 @@ function startRace() {
   if (racing) return;
   const bet = parseInt(document.getElementById("bet-amount").value) || 0;
   if (selectedHorse === null) { addLog("⚠️ 말을 먼저 선택하세요!"); return; }
-  if (bet < 10) { addLog("⚠️ 최소 베팅은 10P입니다!"); return; }
-  if (bet > points) { addLog("⚠️ 포인트가 부족합니다!"); return; }
-  points -= bet; updatePointsDisplay(); savePoints();
+  if (bet < UNIT) { addLog("⚠️ 최소 베팅은 1,000원입니다!"); return; }
+  if (bet > points) { addLog("⚠️ 잔액이 부족합니다!"); return; }
+  points -= bet; updatePointsDisplay();
   racing = true;
   document.getElementById("start-btn").disabled = true;
   document.getElementById("result-banner").classList.remove("show");
   const laneW = document.querySelector(".track-lane").offsetWidth - 80;
   positions = HORSES.map(() => 0);
-  const speeds = HORSES.map(h => (1 / h.odds) * (0.7 + Math.random() * 0.6));
+  const speeds = HORSES.map(() => 0.45 * (0.5 + Math.random() * 1.0));
   let finished = false;
-  addLog("🏇 경기 시작! [" + HORSES[selectedHorse].name + "] 에 " + bet.toLocaleString() + "P 베팅");
+  addLog("🏇 경기 시작! [" + HORSES[selectedHorse].name + "] 에 " + fmtWon(bet) + " 베팅");
   function tick() {
     for (let i = 0; i < HORSES.length; i++) {
-      const surge = Math.random() < 0.1 ? 1.8 : 1.0;
-      const fatigue = positions[i] / laneW > 0.7 ? 0.85 : 1.0;
-      positions[i] = Math.min(laneW, positions[i] + speeds[i] * surge * fatigue * 3.5);
+      const surge = Math.random() < 0.08 ? 1.7 : 1.0;
+      const fatigue = positions[i] / laneW > 0.75 ? 0.9 : 1.0;
+      positions[i] = Math.min(laneW, positions[i] + speeds[i] * surge * fatigue * 3.2);
       document.getElementById("horse-" + i).style.left = (40 + positions[i]) + "px";
       document.getElementById("prog-" + i).style.width = positions[i] + "px";
       if (positions[i] >= laneW && !finished) { finished = true; racing = false; showResult(i, bet); return; }
@@ -209,31 +397,60 @@ function showResult(winnerId, bet) {
   const winner = HORSES[winnerId];
   const isWin = winnerId === selectedHorse;
   const prize = isWin ? Math.floor(bet * winner.odds) : 0;
-  if (isWin) { points += prize; addLog("🎉 " + winner.name + " 1등! 당첨! +" + prize.toLocaleString() + "P", "win"); }
-  else { addLog("💨 " + winner.name + " 1등... " + HORSES[selectedHorse].name + " 탈락. -" + bet.toLocaleString() + "P", "lose"); }
-  updatePointsDisplay(); savePoints();
+  if (isWin) { points += prize; addLog("🎉 " + winner.name + " 1등! 당첨! +" + fmtWon(prize), "win"); }
+  else { addLog("💨 " + winner.name + " 1등... " + HORSES[selectedHorse].name + " 탈락. -" + fmtWon(bet), "lose"); }
+  if (debt > 0) {
+    const interest = Math.floor(debt * debtRate);
+    debt += interest;
+    if (points >= interest) {
+      points -= interest;
+      showToast("💀 이자 " + fmtWon(interest) + " 차감! 남은 대출: " + fmtWon(debt));
+      addLog("💀 이자 " + fmtWon(interest) + " 차감 (대출 잔액: " + fmtWon(debt) + ")", "lose");
+    } else {
+      // 이자가 잔액보다 크면 잔액 0으로 막음
+      addLog("💀 이자 " + fmtWon(interest) + " 미납... 잔액 소진! (대출 잔액: " + fmtWon(debt) + ")", "lose");
+      points = 0;
+    }
+  }
+  // 잔액 절대 음수 방지
+  if (points < 0) points = 0;
+  updatePointsDisplay();
   document.getElementById("result-winner").textContent = winner.emoji + " " + winner.emoji;
   document.getElementById("result-text").textContent = "🥇 " + winner.name + " 우승!";
   document.getElementById("result-sub").textContent = isWin
-    ? "✨ 적중! " + prize.toLocaleString() + "P 획득 | 보유: " + points.toLocaleString() + "P"
-    : "아쉽... " + HORSES[selectedHorse].name + "은 이번엔 아니었네요. 보유: " + points.toLocaleString() + "P";
+    ? "✨ 적중! +" + fmtWon(prize) + " | 잔액: " + fmtWon(points)
+    : "아쉽... " + HORSES[selectedHorse].name + "은 이번엔 아니었네요. 잔액: " + fmtWon(points);
   const banner = document.getElementById("result-banner");
   banner.style.background = isWin ? "#1a5c1a" : "#5c1a1a";
   document.getElementById("result-text").style.color = isWin ? "#f5e642" : "#f5a0a0";
   document.getElementById("result-sub").style.color = isWin ? "#a0d0a0" : "#f0a0a0";
   banner.classList.add("show");
   document.getElementById("start-btn").disabled = false;
-  if (points <= 0) { points = 500; addLog("💸 파산! 500P 지급.", "win"); updatePointsDisplay(); savePoints(); }
+  if (points < UNIT) setTimeout(() => showLoanModal(), 600);
 }
 function resetRace() {
   if (racing) { cancelAnimationFrame(animFrame); racing = false; }
-  points = 1000; localStorage.removeItem("cyberDerbyPoints");
+  points = 1000000; debt = 0; debtRate = 0; debtName = "";
   selectedHorse = null;
   updatePointsDisplay(); buildTrack(); buildHorseTable();
   document.getElementById("result-banner").classList.remove("show");
   document.getElementById("start-btn").disabled = false;
-  document.getElementById("log").innerHTML = '<div class="log-entry">🔄 초기화 완료! 1,000P로 다시 시작합니다.</div>';
+  document.getElementById("loan-modal").classList.remove("show");
+  document.getElementById("log").innerHTML = '<div class="log-entry">🔄 초기화 완료! 100만 원으로 다시 시작합니다.</div>';
   updatePreview();
+}
+function triggerRepaidAnimation() {
+  const bar = document.getElementById("debt-bar");
+  const fill = document.getElementById("debt-fill");
+  const label = document.getElementById("debt-repaid-label");
+  bar.classList.add("repaid");
+  label.style.display = "block";
+  setTimeout(() => { fill.style.width = "100%"; }, 50);
+  setTimeout(() => {
+    bar.classList.remove("show", "repaid");
+    fill.style.width = "0%";
+    label.style.display = "none";
+  }, 2200);
 }
 buildHorseTable();
 buildTrack();
