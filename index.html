@@ -16,7 +16,7 @@
   .track-lane.selected-lane { border: 2px solid #2a9d2a; background: #1a6e1a; }
   .lane-finish { position: absolute; right: 0; top: 0; bottom: 0; width: 32px; background: repeating-linear-gradient(45deg,#fff 0,#fff 4px,#222 4px,#222 8px); opacity: 0.6; }
   .lane-label { position: absolute; left: 8px; font-size: 12px; color: #a0d0a0; font-weight: 600; z-index: 4; white-space: nowrap; text-shadow: 0 1px 3px rgba(0,0,0,0.9), 0 0 6px rgba(0,0,0,0.8); pointer-events: none; }
-  .horse { position: absolute; left: 40px; font-size: 28px; transition: left 0.1s linear; z-index: 3; filter: drop-shadow(1px 1px 2px rgba(0,0,0,0.5)); }
+  .horse { position: absolute; font-size: 28px; transition: left 0.1s linear; z-index: 3; filter: drop-shadow(1px 1px 2px rgba(0,0,0,0.5)); }
   .progress-bar { position: absolute; left: 40px; top: 0; bottom: 0; background: rgba(255,255,255,0.07); transition: width 0.1s linear; z-index: 1; }
   .finish-line-glow { position: absolute; right: 32px; top: 0; bottom: 0; width: 2px; background: #f5e642; opacity: 0.8; }
 
@@ -361,10 +361,22 @@ function buildTrack() {
   document.getElementById("track").innerHTML = HORSES.map((h, i) =>
     "<div class='track-lane' id='lane-" + i + "' onclick='selectHorseFromTrack(" + i + ")'>" +
     "<div class='progress-bar' id='prog-" + i + "' style='width:0'></div>" +
-    "<div class='lane-label'>" + (i+1) + ". " + h.name + "</div>" +
+    "<div class='lane-label' id='label-" + i + "'>" + (i+1) + ". " + h.name + "</div>" +
     "<div class='horse' id='horse-" + i + "'>" + h.emoji + "</div>" +
     "<div class='finish-line-glow'></div><div class='lane-finish'></div></div>"
   ).join("");
+  // 말 초기 위치: 가장 긴 이름 기준으로 모두 통일
+  requestAnimationFrame(() => {
+    let maxLabelW = 0;
+    HORSES.forEach((h, i) => {
+      const label = document.getElementById("label-" + i);
+      if (label && label.offsetWidth > maxLabelW) maxLabelW = label.offsetWidth;
+    });
+    HORSES.forEach((h, i) => {
+      const horse = document.getElementById("horse-" + i);
+      if (horse) horse.style.left = (maxLabelW + 12) + "px";
+    });
+  });
 }
 function addLog(msg, cls) {
   const log = document.getElementById("log");
@@ -384,7 +396,15 @@ function startRace() {
   racing = true;
   document.getElementById("start-btn").disabled = true;
   document.getElementById("result-banner").classList.remove("show");
-  const laneW = document.querySelector(".track-lane").offsetWidth - 80;
+  const laneEl = document.querySelector(".track-lane");
+  const totalW = laneEl.offsetWidth;
+  let maxLabelW = 0;
+  HORSES.forEach((h, i) => {
+    const lbl = document.getElementById("label-" + i);
+    if (lbl && lbl.offsetWidth > maxLabelW) maxLabelW = lbl.offsetWidth;
+  });
+  const startX = maxLabelW + 12;
+  const laneW = totalW - startX - 36;
   positions = HORSES.map(() => 0);
   const speeds = HORSES.map(() => 0.45 * (0.5 + Math.random() * 1.0));
   let finished = false;
@@ -394,7 +414,8 @@ function startRace() {
       const surge = Math.random() < 0.08 ? 1.7 : 1.0;
       const fatigue = positions[i] / laneW > 0.75 ? 0.9 : 1.0;
       positions[i] = Math.min(laneW, positions[i] + speeds[i] * surge * fatigue * 3.2);
-      document.getElementById("horse-" + i).style.left = (40 + positions[i]) + "px";
+      document.getElementById("horse-" + i).style.left = (startX + positions[i]) + "px";
+      document.getElementById("prog-" + i).style.left = startX + "px";
       document.getElementById("prog-" + i).style.width = positions[i] + "px";
       if (positions[i] >= laneW && !finished) { finished = true; racing = false; showResult(i, bet); return; }
     }
