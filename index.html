@@ -11,7 +11,9 @@
 
   .track-container { background: #1a5c1a; border-radius: 12px; padding: 1.5rem; margin-bottom: 1rem; overflow: hidden; }
   .track-title { text-align: center; color: #f5e642; font-size: 20px; font-weight: 600; letter-spacing: 2px; margin-bottom: 1.2rem; }
-  .track-lane { display: flex; align-items: center; background: #145214; border-radius: 6px; margin-bottom: 8px; height: 52px; position: relative; border: 1px solid #2a7a2a; overflow: hidden; }
+  .track-lane { display: flex; align-items: center; background: #145214; border-radius: 6px; margin-bottom: 8px; height: 52px; position: relative; border: 1px solid #2a7a2a; overflow: hidden; cursor: pointer; transition: border-color 0.15s; }
+  .track-lane:hover { border-color: #4acd4a; }
+  .track-lane.selected-lane { border: 2px solid #2a9d2a; background: #1a6e1a; }
   .lane-finish { position: absolute; right: 0; top: 0; bottom: 0; width: 32px; background: repeating-linear-gradient(45deg,#fff 0,#fff 4px,#222 4px,#222 8px); opacity: 0.6; }
   .lane-label { position: absolute; left: 8px; font-size: 12px; color: #a0d0a0; font-weight: 600; z-index: 4; white-space: nowrap; text-shadow: 0 1px 3px rgba(0,0,0,0.9), 0 0 6px rgba(0,0,0,0.8); pointer-events: none; }
   .horse { position: absolute; left: 40px; font-size: 28px; transition: left 0.1s linear; z-index: 3; filter: drop-shadow(1px 1px 2px rgba(0,0,0,0.5)); }
@@ -342,15 +344,22 @@ function buildHorseTable() {
     "<td><span class='td-tier'>" + h.tier + "</span></td></tr>"
   ).join("");
 }
+function selectHorseFromTrack(i) {
+  selectHorse(i);
+  // 말 선택 테이블도 스크롤해서 보이게
+  const row = document.getElementById("hr-" + i);
+  if (row) row.scrollIntoView({ behavior: "smooth", block: "nearest" });
+}
 function selectHorse(i) {
   if (racing) return;
   selectedHorse = i;
   document.querySelectorAll("#horse-tbody tr").forEach((el, idx) => el.classList.toggle("selected", idx === i));
+  document.querySelectorAll(".track-lane").forEach((el, idx) => el.classList.toggle("selected-lane", idx === i));
   updatePreview();
 }
 function buildTrack() {
   document.getElementById("track").innerHTML = HORSES.map((h, i) =>
-    "<div class='track-lane'>" +
+    "<div class='track-lane' id='lane-" + i + "' onclick='selectHorseFromTrack(" + i + ")'>" +
     "<div class='progress-bar' id='prog-" + i + "' style='width:0'></div>" +
     "<div class='lane-label'>" + (i+1) + ". " + h.name + "</div>" +
     "<div class='horse' id='horse-" + i + "'>" + h.emoji + "</div>" +
